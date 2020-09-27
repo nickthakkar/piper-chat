@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import './App.css';
 
 import firebase from 'firebase/app';
@@ -26,7 +26,8 @@ function App() {
   return (
     <div className="App">
       <header>
-        <logout />
+        <h1>Piper Chat</h1>
+        <SignOut />
       </header>
 
       <section>
@@ -55,6 +56,8 @@ function SignOut() {
 
 function ChatRoom() {
 
+  const scrollBottom = useRef();
+
   const messageRef = firestore.collection('messages');
   const query = messageRef.orderBy('createdAt').limit(25);
 
@@ -72,14 +75,20 @@ function ChatRoom() {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid,
       photoURL
-    })
+    });
+
+    setFormValue('');
+
+    scrollBottom.current.scrollIntoView({ behavior: 'smooth'});
   }
 
   return (
     <>
-      <div>
+      <main>
         {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg}/>)}
-      </div>
+
+        <div ref={scrollBottom}></div>
+      </main>
 
       <form onSubmit={sendMessage}>
         <input value={formValue} onChange={(e) => setFormValue(e.target.value)}/>
