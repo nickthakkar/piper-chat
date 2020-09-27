@@ -27,7 +27,7 @@ function App() {
     <div className="App">
       <header>
         <h1>Piper Chat</h1>
-        <SignOut />
+        <SignOut/>
       </header>
 
       <section>
